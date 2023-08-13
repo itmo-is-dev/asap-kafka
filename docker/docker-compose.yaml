@@ -21,7 +21,11 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "asap_queue_updated:1:1,asap_subject_course:1:1,asap_subject_course_points:1:1"
+      KAFKA_CREATE_TOPICS: >
+        asap_queue_updated:1:1,
+        asap_subject_course:1:1,
+        asap_subject_course_points:1:1,
+        asap_assignment:1:1
       ALLOW_PLAINTEXT_LISTENER: yes
     depends_on:
       - zookeeper
@@ -42,12 +46,18 @@ services:
 
       kafka.clusters.0.serde.0.name: ProtobufFile
       kafka.clusters.0.serde.0.properties.protobufFilesDir: /schemas/
+      
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedValue
+      
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedValue
+      
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedValue
+      
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
 
 networks:
   asap-kafka:
