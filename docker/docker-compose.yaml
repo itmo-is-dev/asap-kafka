@@ -43,7 +43,7 @@ services:
     volumes:
       - ../protos:/schemas
     environment:
-      server.forward-headers-strategy=FRAMEWORK
+      server.forward-headers-strategy: FRAMEWORK
       kafka.clusters.0.name: kafka
       kafka.clusters.0.bootstrapServers: kafka:9094
 
