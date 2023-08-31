@@ -14,6 +14,8 @@ services:
       - '8001:9092'
     networks:
       - asap-kafka
+    volumes:
+      - kafka-data:/var/run/docker.sock
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
@@ -62,3 +64,7 @@ services:
 networks:
   asap-kafka:
     driver: bridge
+    
+volumes: 
+  kafka-data:
+    external: true
