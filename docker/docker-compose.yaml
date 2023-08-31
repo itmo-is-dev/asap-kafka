@@ -44,6 +44,8 @@ services:
       - ../protos:/schemas
     environment:
       server.forward-headers-strategy: FRAMEWORK
+      SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
+      
       kafka.clusters.0.name: kafka
       kafka.clusters.0.bootstrapServers: kafka:9094
 
