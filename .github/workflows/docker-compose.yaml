@@ -14,7 +14,8 @@ jobs:
       branch: ${{ steps.extract-branch.outputs.branch }}
       environment-key: ${{ steps.setup-env.outputs.environment-key }}
       runner-label: ${{ steps.setup-label.outputs.runner-label }}
-    name: environment-set 
+    name: environment-set
+    runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
         shell: bash
