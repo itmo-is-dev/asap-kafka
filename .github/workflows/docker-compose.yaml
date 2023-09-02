@@ -28,11 +28,11 @@ jobs:
       - name: Set runner label
         id: setup-label
         run: |
-          echo runner-label=itmo-is-dev.${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
+          echo runner-label=${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
 
   deploy:  
     needs: environment-set
-    runs-on: ${{ needs.environment-set.outputs.runner-label }}
+    runs-on: [self-hosted, ${{ needs.environment-set.outputs.runner-label }}]
     environment: ${{ needs.environment-set.outputs.environment-key }}
     steps:
       - uses: actions/checkout@v2
