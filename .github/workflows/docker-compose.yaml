@@ -32,11 +32,11 @@ jobs:
 
   deploy:  
     needs: environment-set
-    runs-on: self-hosted
+    runs-on: [self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}"]
     environment: ${{ needs.environment-set.outputs.environment-key }}
     steps:
       - uses: actions/checkout@v2
 
       - name: docker-compose
         run: |
-          docker compose -f docker\docker-compose.yaml --env-file docker\.env
+          docker compose -f docker/docker-compose.yaml --env-file docker/.env
