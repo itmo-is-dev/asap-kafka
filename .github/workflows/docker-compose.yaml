@@ -32,7 +32,7 @@ jobs:
 
   deploy:  
     needs: environment-set
-    runs-on: [self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}"]
+    runs-on: self-hosted
     environment: ${{ needs.environment-set.outputs.environment-key }}
     steps:
       - uses: actions/checkout@v2
