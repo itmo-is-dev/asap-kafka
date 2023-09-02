@@ -23,11 +23,11 @@ jobs:
       - name: Set environment name
         id: setup-env
         run: |
-        echo environment-key=${{ steps.extract-branch.outputs.branch == 'master' && 'production' || 'staging' }} >> "$GITHUB_OUTPUT"
+          echo environment-key=${{ steps.extract-branch.outputs.branch == 'master' && 'production' || 'staging' }} >> "$GITHUB_OUTPUT"
       - name: Set runner label
         id: setup-label
         run: |
-        echo runner-label=${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
+          echo runner-label=${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
 
   deploy:  
     needs: environment-set
