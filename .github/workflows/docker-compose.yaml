@@ -1,0 +1,21 @@
+name: docker-compose
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+  workflow_dispatch:      
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: asap-stg-vm
+    environment: staging 
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker-compose
+        run: |
+          docker compose -f docker\docker-compose.yaml --env-file docker\.env
