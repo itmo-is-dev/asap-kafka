@@ -67,7 +67,7 @@ services:
 
 networks:
   asap-kafka:
-    driver: bridge
+    driver: overlay
     
 volumes: 
   kafka-data:
