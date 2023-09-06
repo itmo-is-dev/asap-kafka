@@ -16,6 +16,7 @@ services:
       - asap-kafka
     volumes:
       - kafka-data:/var/run/docker.sock
+    restart: unless-stopped
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
