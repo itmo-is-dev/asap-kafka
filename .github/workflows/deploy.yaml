@@ -1,4 +1,4 @@
-name: docker-compose
+name: deploy
 
 on:
   push:
@@ -39,4 +39,5 @@ jobs:
 
       - name: docker-compose
         run: |
-          docker compose -f docker/docker-compose.yaml --env-file docker/.env up -d --wait --wait-timeout 30
+          cd docker/deployment
+          docker compose up -d --wait --wait-timeout 30
