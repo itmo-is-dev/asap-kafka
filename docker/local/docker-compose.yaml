@@ -34,7 +34,6 @@ services:
       - "8003:8080"
     volumes:
       - ../../protos:/schemas
-      - ../kafka-ui-config.yaml:/config.yaml
     environment:
       kafka.clusters.0.bootstrapServers: kafka:9094
 

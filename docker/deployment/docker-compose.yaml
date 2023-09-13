@@ -5,7 +5,7 @@ services:
     extends:
       service: zookeeper
       file: ../docker-compose.yaml
-    networks: 
+    networks:
       - asap-network
   
   kafka:
@@ -30,7 +30,6 @@ services:
       - asap-network
     volumes:
       - ../../protos:/schemas
-      - ../kafka-ui-config.yaml:/config.yaml
     environment:
       server.forward-headers-strategy: FRAMEWORK
       SERVER_SERVLET_CONTEXT_PATH: /kafka-ui

@@ -26,4 +26,19 @@ services:
     depends_on:
       - kafka
     environment:
-      SPRING_CONFIG_ADDITIONAL-LOCATION: /config.yaml
+      kafka.clusters.0.name: kafka
+
+      kafka.clusters.0.serde.0.name: ProtobufFile
+      kafka.clusters.0.serde.0.properties.protobufFilesDir: /schemas/
+
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedValue
+
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedValue
+
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedValue
+
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
