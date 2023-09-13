@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  zookeeper:
+    extends:
+      service: zookeeper
+      file: ../docker-compose.yaml
+    networks: 
+      - asap-network
+  
+  kafka:
+    extends:
+      service: kafka
+      file: ../docker-compose.yaml
+    volumes:
+      - kafka-data:/kafka
+    networks:
+      - asap-network
+    environment:
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+  
+  kafka-ui:
+    extends:
+      service: kafka-ui
+      file: ../docker-compose.yaml
+    networks:
+      - asap-network
+    volumes:
+      - ../../protos:/schemas
+      - ../kafka-ui-config.yaml:/config.yaml
+    environment:
+      server.forward-headers-strategy: FRAMEWORK
+      SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
+      kafka.clusters.0.bootstrapServers: kafka:9092
+
+networks:
+  asap-network:
+    driver: bridge
+    external: true
+
+volumes:
+  kafka-data:
+    external: true

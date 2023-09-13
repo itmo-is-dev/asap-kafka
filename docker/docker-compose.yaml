@@ -3,26 +3,14 @@ version: '3.9'
 services:
   zookeeper:
     image: 'wurstmeister/zookeeper:latest'
-    networks:
-      - asap-kafka
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
     image: 'wurstmeister/kafka:latest'
-    ports:
-      - '8001:9092'
-    networks:
-      - asap-kafka
-    volumes:
-      - kafka-data:/var/run/docker.sock
     restart: unless-stopped
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
-      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://127.0.0.1:8001,INTERNAL://kafka:9094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: >
         asap_queue_updated:1:1,
@@ -35,40 +23,7 @@ services:
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
-    ports:
-      - "8003:8080"
-    networks:
-      - asap-kafka
     depends_on:
       - kafka
-    volumes:
-      - ../protos:/schemas
     environment:
-      server.forward-headers-strategy: FRAMEWORK
-      SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
-      
-      kafka.clusters.0.name: kafka
-      kafka.clusters.0.bootstrapServers: kafka:9094
-
-      kafka.clusters.0.serde.0.name: ProtobufFile
-      kafka.clusters.0.serde.0.properties.protobufFilesDir: /schemas/
-      
-      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedKey
-      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_queue_updated: itmo.dev.asap.kafka.QueueUpdatedValue
-      
-      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedKey
-      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course: itmo.dev.asap.kafka.SubjectCourseCreatedValue
-      
-      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedKey
-      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_subject_course_points: itmo.dev.asap.kafka.SubjectCoursePointsUpdatedValue
-      
-      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
-      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
-
-networks:
-  asap-kafka:
-    driver: bridge
-    
-volumes: 
-  kafka-data:
-    external: true
+      SPRING_CONFIG_ADDITIONAL-LOCATION: /config.yaml
