@@ -13,7 +13,7 @@ services:
       service: kafka
       file: ../docker-compose.yaml
     volumes:
-      - kafka-data:/kafka
+      - kafka-data-new:/kafka
     networks:
       - asap-network
     environment:
