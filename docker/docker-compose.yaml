@@ -16,7 +16,8 @@ services:
         asap_queue_updated:1:1,
         asap_subject_course:1:1,
         asap_subject_course_points:1:1,
-        asap_assignment:1:1
+        asap_assignment:1:1,
+        asap_student_points:1:1
       ALLOW_PLAINTEXT_LISTENER: yes
     depends_on:
       - zookeeper
@@ -42,3 +43,6 @@ services:
 
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
+      
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedValue
