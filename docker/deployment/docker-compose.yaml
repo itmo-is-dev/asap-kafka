@@ -41,5 +41,5 @@ networks:
     external: true
 
 volumes:
-  kafka-data:
+  kafka-data-new:
     external: true
