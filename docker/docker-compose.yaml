@@ -3,6 +3,7 @@ version: '3.9'
 services:
   zookeeper:
     image: 'wurstmeister/zookeeper:latest'
+    restart: unless-stopped
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
@@ -10,19 +11,22 @@ services:
     image: 'wurstmeister/kafka:latest'
     restart: unless-stopped
     environment:
+      KAFKA_LOG_DIRS: /kafka-data
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: >
         asap_queue_updated:1:1,
         asap_subject_course:1:1,
         asap_subject_course_points:1:1,
-        asap_assignment:1:1
+        asap_assignment:1:1,
+        asap_student_points:1:1
       ALLOW_PLAINTEXT_LISTENER: yes
     depends_on:
       - zookeeper
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
+    restart: unless-stopped
     depends_on:
       - kafka
     environment:
@@ -42,3 +46,6 @@ services:
 
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
+      
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedValue
