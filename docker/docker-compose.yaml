@@ -3,6 +3,7 @@ version: '3.9'
 services:
   zookeeper:
     image: 'wurstmeister/zookeeper:latest'
+    restart: unless-stopped
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
@@ -25,6 +26,7 @@ services:
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
+    restart: unless-stopped
     depends_on:
       - kafka
     environment:
