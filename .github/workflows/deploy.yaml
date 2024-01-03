@@ -6,7 +6,7 @@ on:
       - master
       - develop
 
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   environment-set:
@@ -16,7 +16,7 @@ jobs:
       runner-label: ${{ steps.setup-label.outputs.runner-label }}
     name: environment-set
     runs-on: ubuntu-latest
-  
+    
     steps:
       - name: Extract branch name
         shell: bash
@@ -33,22 +33,29 @@ jobs:
         run: |
           echo runner-label=${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
 
-  deploy:  
+  deploy:
     needs: environment-set
-    runs-on: [self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}"]
+    runs-on: [ self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}" ]
     environment: ${{ needs.environment-set.outputs.environment-key }}
 
     steps:
       - uses: actions/checkout@v2
-        
-      - name: load certificate
+
+      - name: download certificate
         run: |
           cd docker/deployment
-          
-          mkdir certificates && \
+
+          mkdir -p certificates && \
           wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
             --output-document certificates/certificate.crt && \
           chmod 0655 certificates/certificate.crt
+
+      - name: install certificate
+        run: |
+          cd docker/deployment/truststore && \
+          sudo keytool -importcert \
+          -alias kafka-certificate -file ../certificates/certificate.crt \
+          -keystore ssl --noprompt
 
       - name: docker-compose
         run: |
