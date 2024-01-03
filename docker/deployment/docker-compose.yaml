@@ -8,6 +8,8 @@ services:
     volumes:
       - ../../protos:/schemas
       - ./truststore:/truststore
+    networks:
+      - asap-network
     environment:
       server.forward-headers-strategy: FRAMEWORK
       SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
@@ -16,4 +18,9 @@ services:
       kafka.clusters.0.properties.sasl.mechanism: SCRAM-SHA-512
       kafka.clusters.0.properties.sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username=${KAFKA_USERNAME} password=${KAFKA_PASSWORD};
       kafka.clusters.0.properties.ssl.truststore.location: /truststore
-      kafka.clusters.0.properties.ssl.truststore.password: kafka-ui
+      kafka.clusters.0.properties.ssl.truststore.password: kafka-ui 
+
+networks:
+  asap-network:
+    driver: bridge
+    external: true
