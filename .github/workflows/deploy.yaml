@@ -44,6 +44,11 @@ jobs:
       - name: docker-compose
         run: |
           cd docker/deployment
+          
+          mkdir certificates \ 
+          && wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
+            --output-document certificates/certificate.crt \
+          && chmod 0655 certificates/certificate.crt
 
           KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
           KAFKA_USERNAME=${{ secrets.KAFKA_USERNAME }} \
