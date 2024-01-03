@@ -52,7 +52,9 @@ jobs:
 
       - name: install certificate
         run: |
-          cd docker/deployment/truststore && \
+          cd docker/deployment
+          
+          mkdir truststore && cd truststore && \
           sudo keytool -importcert \
           -alias kafka-certificate -file ../certificates/certificate.crt \
           -keystore ssl --noprompt
