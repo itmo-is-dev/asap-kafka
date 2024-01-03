@@ -43,21 +43,22 @@ jobs:
 
       - name: download certificate
         run: |
-          cd docker/deployment
-
-          mkdir -p certificates && \
+          mkdir -p /usr/local/share/ca-certificates/Yandex && \
           wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
-            --output-document certificates/certificate.crt && \
-          chmod 0655 certificates/certificate.crt
-
+            --output-document /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt && \
+          chmod 0655 /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt
+        
       - name: install certificate
         run: |
-          cd docker/deployment
-          
-          mkdir truststore && cd truststore && \
+          cd /etc/security && \
           sudo keytool -importcert \
-          -alias kafka-certificate -file ../certificates/certificate.crt \
-          -keystore ssl --noprompt
+          -alias YandexCA -file /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt \
+          -keystore ssl -storepass kafka-ui \
+          --noprompt
+          
+      - name: copy truststore
+        run: |
+          cp /etc/security/ssl docker/deployment/truststore
 
       - name: docker-compose
         run: |
