@@ -16,15 +16,18 @@ jobs:
       runner-label: ${{ steps.setup-label.outputs.runner-label }}
     name: environment-set
     runs-on: ubuntu-latest
+  
     steps:
       - name: Extract branch name
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract-branch
+
       - name: Set environment name
         id: setup-env
         run: |
           echo environment-key=${{ steps.extract-branch.outputs.branch == 'master' && 'production' || 'staging' }} >> "$GITHUB_OUTPUT"
+
       - name: Set runner label
         id: setup-label
         run: |
@@ -34,10 +37,11 @@ jobs:
     needs: environment-set
     runs-on: [self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}"]
     environment: ${{ needs.environment-set.outputs.environment-key }}
+
     steps:
       - uses: actions/checkout@v2
 
       - name: docker-compose
         run: |
           cd docker/deployment
-          docker compose up -d --wait --wait-timeout 30
+          KAFKA_HOST=${{ secrets.KAFKA_HOST }} docker compose up -d --wait --wait-timeout 30
