@@ -49,6 +49,7 @@ jobs:
           sudo chmod 0655 /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt
         
       - name: install certificate
+        continue-on-error: true
         run: |
           cd /etc/security && \
           sudo keytool -importcert \
