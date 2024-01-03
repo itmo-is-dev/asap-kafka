@@ -44,4 +44,8 @@ jobs:
       - name: docker-compose
         run: |
           cd docker/deployment
-          KAFKA_HOST=${{ secrets.KAFKA_HOST }} docker compose up -d --wait --wait-timeout 30
+
+          KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
+          KAFKA_USERNAME=${{ secrets.KAFKA_USERNAME }} \
+          KAFKA_PASSWORD=${{ secrets.KAFKA_PASSWORD }} \
+          docker compose up -d --wait --wait-timeout 30
