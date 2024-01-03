@@ -40,6 +40,8 @@ services:
       - '8001:9092'
 
   kafka-ui:
+    depends_on:
+      - kafka
     extends:
       service: kafka-ui
       file: ../docker-compose.yaml

@@ -4,8 +4,6 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     restart: unless-stopped
-    depends_on:
-      - kafka
     environment:
       kafka.clusters.0.name: kafka
 
