@@ -7,7 +7,7 @@ services:
       file: ../docker-compose.yaml
     volumes:
       - ../../protos:/schemas
-      - certificates:certificates
+      - ./certificates:certificates
     environment:
       server.forward-headers-strategy: FRAMEWORK
       SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
