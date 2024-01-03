@@ -52,6 +52,7 @@ jobs:
 
       - name: docker-compose
         run: |
+          cd docker/deployment
 
           KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
           KAFKA_USERNAME=${{ secrets.KAFKA_USERNAME }} \
