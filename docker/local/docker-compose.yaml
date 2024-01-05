@@ -17,6 +17,11 @@ services:
       KAFKA_LOG_DIRS: /kafka-data
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://127.0.0.1:8001,INTERNAL://kafka:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
       KAFKA_CREATE_TOPICS: >
         asap_queue_updated:1:1,
         asap_subject_course:1:1,
@@ -25,11 +30,6 @@ services:
         asap_student_points:1:1,
         asap_submission_data:1:1,
         asap_ban_machine_analysis:1:1
-        KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-        KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
-        KAFKA_ADVERTISED_LISTENERS: EXTERNAL://127.0.0.1:8001,INTERNAL://kafka:9094
-        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-        ALLOW_PLAINTEXT_LISTENER: yes
     depends_on:
       - zookeeper
     volumes:
