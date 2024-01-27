@@ -6,7 +6,7 @@ on:
       - master
       - develop
 
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   environment-set:
@@ -16,28 +16,56 @@ jobs:
       runner-label: ${{ steps.setup-label.outputs.runner-label }}
     name: environment-set
     runs-on: ubuntu-latest
+    
     steps:
       - name: Extract branch name
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract-branch
+
       - name: Set environment name
         id: setup-env
         run: |
           echo environment-key=${{ steps.extract-branch.outputs.branch == 'master' && 'production' || 'staging' }} >> "$GITHUB_OUTPUT"
+
       - name: Set runner label
         id: setup-label
         run: |
           echo runner-label=${{ steps.extract-branch.outputs.branch == 'master' && 'asap-prod-vm' || 'asap-stg-vm' }} >> "$GITHUB_OUTPUT"
 
-  deploy:  
+  deploy:
     needs: environment-set
-    runs-on: [self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}"]
+    runs-on: [ self-hosted, Linux, X64, "${{ needs.environment-set.outputs.runner-label }}" ]
     environment: ${{ needs.environment-set.outputs.environment-key }}
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: download certificate
+        run: |
+          sudo mkdir -p /usr/local/share/ca-certificates/Yandex && \
+          sudo wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
+            --output-document /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt && \
+          sudo chmod 0655 /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt
+        
+      - name: install certificate
+        continue-on-error: true
+        run: |
+          cd /etc/security && \
+          sudo keytool -importcert \
+          -alias YandexCA -file /usr/local/share/ca-certificates/Yandex/YandexInternalRootCA.crt \
+          -keystore ssl -storepass kafka-ui \
+          --noprompt
+          
+      - name: copy truststore
+        run: |
+          sudo cp /etc/security/ssl docker/deployment/truststore
 
       - name: docker-compose
         run: |
           cd docker/deployment
+
+          KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
+          KAFKA_USERNAME=${{ secrets.KAFKA_USERNAME }} \
+          KAFKA_PASSWORD=${{ secrets.KAFKA_PASSWORD }} \
           docker compose up -d --wait --wait-timeout 30

@@ -1,45 +1,26 @@
 version: '3.9'
 
 services:
-  zookeeper:
-    extends:
-      service: zookeeper
-      file: ../docker-compose.yaml
-    networks:
-      - asap-network
-  
-  kafka:
-    extends:
-      service: kafka
-      file: ../docker-compose.yaml
-    volumes:
-      - kafka-data-new:/kafka-data
-    networks:
-      - asap-network
-    environment:
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LISTENERS: INTERNAL://:9092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
-  
   kafka-ui:
     extends:
       service: kafka-ui
       file: ../docker-compose.yaml
-    networks:
-      - asap-network
     volumes:
       - ../../protos:/schemas
+      - ./truststore:/truststore
+    networks:
+      - asap-network
     environment:
       server.forward-headers-strategy: FRAMEWORK
       SERVER_SERVLET_CONTEXT_PATH: /kafka-ui
-      kafka.clusters.0.bootstrapServers: kafka:9092
+      kafka.clusters.0.bootstrapServers: ${KAFKA_HOST}
+      kafka.clusters.0.properties.security.protocol: SASL_SSL
+      kafka.clusters.0.properties.sasl.mechanism: SCRAM-SHA-512
+      kafka.clusters.0.properties.sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username=${KAFKA_USERNAME} password=${KAFKA_PASSWORD};
+      kafka.clusters.0.properties.ssl.truststore.location: /truststore
+      kafka.clusters.0.properties.ssl.truststore.password: kafka-ui 
 
 networks:
   asap-network:
     driver: bridge
-    external: true
-
-volumes:
-  kafka-data-new:
     external: true
