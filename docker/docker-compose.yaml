@@ -22,6 +22,9 @@ services:
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_assignment: itmo.dev.asap.kafka.AssignmentCreatedValue
       
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_group_assignments: itmo.dev.asap.kafka.GroupAssignmentCreatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_group_assignments: itmo.dev.asap.kafka.GroupAssignmentCreatedValue
+      
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_student_points: itmo.dev.asap.kafka.StudentPointsUpdatedValue
       
@@ -30,3 +33,6 @@ services:
       
       kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_ban_machine_analysis: itmo.dev.asap.kafka.BanMachineAnalysisKey
       kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_ban_machine_analysis: itmo.dev.asap.kafka.BanMachineAnalysisValue
+      
+      kafka.clusters.0.serde.0.properties.protobufMessageNameForKeyByTopic.asap_submissions: itmo.dev.asap.kafka.SubmissionCreatedKey
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.asap_submissions: itmo.dev.asap.kafka.SubmissionCreatedValue

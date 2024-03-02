@@ -27,8 +27,10 @@ services:
         asap_subject_course:1:1,
         asap_subject_course_points:1:1,
         asap_assignment:1:1,
+        asap_group_assignments:1:1,
         asap_student_points:1:1,
         asap_submission_data:1:1,
+        asap_submissions:1:1,
         asap_ban_machine_analysis:1:1
     depends_on:
       - zookeeper

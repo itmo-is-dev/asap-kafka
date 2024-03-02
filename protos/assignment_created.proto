@@ -13,4 +13,5 @@ message AssignmentCreatedValue {
   string subject_course_id = 2;
   string title = 3;
   string short_name = 4;
+  double max_points = 5;
 }
